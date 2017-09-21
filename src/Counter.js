@@ -40,11 +40,20 @@ class Counter extends Component {
   }
 
   onClickIncrementButton() {
-    this.setState({count: this.state.count + 1});
+    this.updateCount(true);
+    //this.setState({count: this.state.count + 1});
   }
 
   onClickDecrementButton() {
-    this.setState({count: this.state.count - 1});
+    this.updateCount(false);
+    //this.setState({count: this.state.count - 1});
+  }
+  updateCount(isIncrement) {
+    const previousValue = this.state.count;
+    const newValue = isIncrement ? previousValue + 1 : previousValue - 1;
+
+    this.setState({count: newValue})
+    this.props.onUpdate(newValue, previousValue)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -67,11 +76,13 @@ class Counter extends Component {
 
 Counter.propTypes = {
   caption: PropTypes.string.isRequired,
-  initValue: PropTypes.number
+  initValue: PropTypes.number,
+  onUpdate:PropTypes.func
 };
 
 Counter.defaultProps = {
-  initValue: 0
+  initValue: 0,
+  onUpdate: f => f //默认是一个什么都不做的函数
 };
 
 export default Counter;
